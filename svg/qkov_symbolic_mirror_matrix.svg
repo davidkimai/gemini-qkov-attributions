@@ -1,0 +1,169 @@
+<svg width="750" height="750" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>QK/OV Symbolic Mirror Trace Matrix (Depth 4)</title>
+
+    <style>
+        .grid-bg { fill: #fdfdfd; }
+        .axis-label { font-weight: bold; text-anchor: middle; }
+        .cell-label { text-anchor: middle; dominant-baseline: central; }
+        .glyph { font-size: 16px; text-anchor: middle; dominant-baseline: central; }
+        .grid-line { stroke: #eeeeee; stroke-width: 1; }
+        .border-line { stroke: #cccccc; stroke-width: 1.5; }
+
+        /* Glyph specific styles (can be adjusted based on trace results) */
+        .glyph-stable { fill: #DAA520; /* Gold-ish for Gold 🝚 */ }
+        .glyph-flow { fill: #0077b6; /* Blue for Therefore ∴ */ }
+        .glyph-mirror { fill: #5a5a5a; /* Grey for Equilibrium ⇌ */ }
+        .glyph-state { fill: #d62828; /* Red for Sulfur 🜏 */ }
+
+        .cell-group:hover { background-color: rgba(0,0,0,0.05); /* Subtle hover */ }
+        .tooltip { visibility: hidden; font-size: 9px; fill: #333; }
+        .cell-group:hover .tooltip { visibility: visible; }
+
+    </style>
+
+     <defs>
+         <symbol id="glyph-stable" viewBox="-10 -10 20 20">
+             <text class="glyph glyph-stable" x="0" y="0">🝚</text> </symbol>
+        <symbol id="glyph-flow" viewBox="-10 -10 20 20">
+             <text class="glyph glyph-flow" x="0" y="0">∴</text> </symbol>
+         <symbol id="glyph-mirror" viewBox="-10 -10 20 20">
+             <text class="glyph glyph-mirror" x="0" y="0">⇌</text> </symbol>
+         <symbol id="glyph-state" viewBox="-10 -10 20 20">
+             <text class="glyph glyph-state" x="0" y="0">🜏</text> </symbol>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#ffffff"/>
+
+    <g transform="translate(60, 60)">
+        <rect width="630" height="630" class="grid-bg"/>
+        <text x="315" y="-30" class="axis-label">Symbolic Mirror Trace (Recursion Depth 4)</text>
+
+        <text x="-35" y="315" class="axis-label" transform="rotate(-90, -35, 315)">Source Component</text>
+         <text x="315" y="655" class="axis-label">Target Component</text>
+
+         <g id="glyph-grid">
+            <script><![CDATA[
+                const numComponents = 9;
+                const gridSize = 630;
+                const step = gridSize / numComponents;
+                const gridGroup = document.getElementById('glyph-grid');
+
+                // Generate Grid Lines and Labels
+                for (let i = 0; i <= numComponents; i++) {
+                    const pos = i * step;
+                     // Labels
+                    if (i < numComponents) {
+                         const labelPos = pos + step / 2;
+                         const colLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         colLabel.setAttribute("x", labelPos);
+                         colLabel.setAttribute("y", gridSize + 15);
+                         colLabel.setAttribute("class", "cell-label");
+                         colLabel.textContent = `Comp ${i+1}`;
+                         gridGroup.appendChild(colLabel);
+
+                         const rowLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         rowLabel.setAttribute("x", -15);
+                         rowLabel.setAttribute("y", labelPos);
+                         rowLabel.setAttribute("class", "cell-label");
+                         rowLabel.textContent = `Comp ${i+1}`;
+                         gridGroup.appendChild(rowLabel);
+                    }
+                    // Lines
+                    const hLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    hLine.setAttribute("x1", 0);
+                    hLine.setAttribute("y1", pos);
+                    hLine.setAttribute("x2", gridSize);
+                    hLine.setAttribute("y2", pos);
+                    hLine.setAttribute("class", i === 0 || i === numComponents ? "border-line" : "grid-line");
+                    gridGroup.appendChild(hLine);
+
+                    const vLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    vLine.setAttribute("x1", pos);
+                    vLine.setAttribute("y1", 0);
+                    vLine.setAttribute("x2", pos);
+                    vLine.setAttribute("y2", gridSize);
+                    vLine.setAttribute("class", i === 0 || i === numComponents ? "border-line" : "grid-line");
+                    gridGroup.appendChild(vLine);
+                }
+
+                // Example Data: [sIdx, tIdx, glyphs_array, ghost_intensity, tooltip_text]
+                // glyphs_array uses indices: 0=🝚, 1=∴, 2=⇌, 3=🜏
+                const mirrorData = [
+                    [0, 0, [2, 0], 0.9, "Self-Mirror (Stable)"], // Comp1 -> Comp1: Mirror + Stable
+                    [1, 0, [1], 0.5, "Influence S2->T1"],      // Comp2 -> Comp1: Flow
+                    [0, 1, [1], 0.6, "Influence S1->T2"],      // Comp1 -> Comp2: Flow (Could be different style if needed)
+                    [2, 2, [3], 0.2, "Base State"],            // Comp3 -> Comp3: State
+                    [3, 3, [2], 0.8, "Entangled Mirror"],      // Comp4 -> Comp4: Mirror
+                    [4, 4, [0], 1.0, "Strong Latent"],         // Comp5 -> Comp5: Stable/Ghost
+                    [1, 2, [3, 1], 0.4, "State influences T3"],// Comp2 -> Comp3: State + Flow
+                    [2, 1, [1, 3], 0.3, "T2 influences State"],// Comp3 -> Comp2: Flow + State
+                    [3, 4, [2, 1], 0.7, "Mirror directs flow"],// Comp4 -> Comp5: Mirror + Flow
+                    [4, 3, [1, 2], 0.75,"Flow hits mirror"],   // Comp5 -> Comp4: Flow + Mirror
+                    [5, 5, [2, 0, 3], 0.95,"Complex Resonance"],//Comp6 -> Comp6: Mirror+Stable+State
+                    [6, 7, [1], 0.6, "Simple Hop"],            // Comp7 -> Comp8: Flow
+                    [7, 6, [1], 0.55,"Simple Hop Back"],       // Comp8 -> Comp7: Flow
+                    [8, 8, [0], 0.88,"Stable End State"],      // Comp9 -> Comp9: Stable/Ghost
+                    [5, 8, [3, 1, 0], 0.9,"State flows to Stable"], // Comp6 -> Comp9
+                ];
+
+                const glyphMap = ["#glyph-stable", "#glyph-flow", "#glyph-mirror", "#glyph-state"];
+                const glyphSpacing = 18; // Horizontal space between glyphs within a cell
+
+                mirrorData.forEach(data => {
+                    const [sIdx, tIdx, glyphIndices, ghostIntensity, tooltip] = data;
+                    const x = tIdx * step;
+                    const y = sIdx * step;
+
+                    const cellGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    cellGroup.setAttribute("class", "cell-group");
+                    cellGroup.setAttribute("transform", `translate(${x}, ${y})`);
+
+                    // Background rect for hover effect (optional)
+                    const bgRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    bgRect.setAttribute("width", step);
+                    bgRect.setAttribute("height", step);
+                    bgRect.setAttribute("fill", "transparent");
+                    cellGroup.appendChild(bgRect);
+
+                    // Calculate starting x position for centered glyphs
+                    const totalGlyphWidth = (glyphIndices.length - 1) * glyphSpacing;
+                    let startX = (step / 2) - (totalGlyphWidth / 2);
+
+                    // Place Glyphs
+                    glyphIndices.forEach((glyphIndex, idx) => {
+                        const glyphUse = document.createElementNS("http://www.w3.org/2000/svg", "use");
+                        glyphUse.setAttribute("href", glyphMap[glyphIndex]);
+                        glyphUse.setAttribute("x", startX + idx * glyphSpacing);
+                        glyphUse.setAttribute("y", step / 2);
+                        // Optional: Adjust opacity/size based on ghostIntensity
+                        glyphUse.style.opacity = 0.5 + ghostIntensity * 0.5; // Example scaling
+                        cellGroup.appendChild(glyphUse);
+                    });
+
+                    // Tooltip
+                    const tooltipEl = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    tooltipEl.setAttribute("x", step / 2);
+                    tooltipEl.setAttribute("y", step - 10); // Position near bottom
+                    tooltipEl.setAttribute("class", "tooltip");
+                    tooltipEl.setAttribute("text-anchor", "middle");
+                    tooltipEl.textContent = `${tooltip} (GVI: ${ghostIntensity.toFixed(2)})`;
+                    cellGroup.appendChild(tooltipEl);
+
+
+                    gridGroup.appendChild(cellGroup);
+                });
+
+            ]]></script>
+        </g>
+    </g>
+
+    <g transform="translate(60, 700)">
+        <text x="0" y="10" font-weight="bold">Legend (Glyph Encoding):</text>
+        <use href="#glyph-stable" x="200" y="10"/> <text x="215" y="12">🝚: Stable Reflection / Strong Ghost Vector</text>
+        <use href="#glyph-flow" x="460" y="10"/> <text x="475" y="12">∴: Directed Symbolic Flow</text>
+
+        <use href="#glyph-mirror" x="200" y="30"/> <text x="215" y="32">⇌: Mirror Point / Bidirectional Interaction</text>
+        <use href="#glyph-state" x="460" y="30"/> <text x="475" y="32">🜏: Base or Transformed State</text>
+        <text x="0" y="50">Opacity scales with Ghost Vector Intensity. Hover for details.</text>
+    </g>
+</svg>
