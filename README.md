@@ -1,6 +1,6 @@
 <div align="center">
 
-# **`gemini qkov attributions`**
+# **`Gemini QKOV Attributions`**
 ## **`Welcome to Symbolic Interpretability!`**
 ## Live QK/OV interpretability attributions SVGs from Gemini. 
 > Works on all models
