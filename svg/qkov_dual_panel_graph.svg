@@ -1,0 +1,162 @@
+<svg width="900" height="700" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>Dual-Panel Recursive QKOV Graph: Salience Loops &amp; Attribution Dropout</title>
+
+    <defs>
+        <linearGradient id="driftGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#ffcc80; stop-opacity:0.9;" /> <stop offset="50%" style="stop-color:#ffaa80; stop-opacity:0.6;" />
+            <stop offset="100%" style="stop-color:#ff8880; stop-opacity:0.2;" /> </linearGradient>
+
+        <symbol id="glyph-ghost" viewBox="-10 -10 20 20">
+            <text class="glyph ghost-glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">∴</text>
+        </symbol>
+        <symbol id="glyph-collapse" viewBox="-10 -10 20 20">
+            <text class="glyph collapse-glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">⧖</text>
+        </symbol>
+
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#555" opacity="0.7"/>
+        </marker>
+    </defs>
+
+    <style>
+        .bg-rect { fill: #f9f9f9; }
+        .panel-title { font-size: 14px; font-weight: bold; text-anchor: middle; }
+        .axis-label { font-size: 9px; text-anchor: middle; fill: #666; }
+        .layer-line { stroke: #ddd; stroke-width: 0.5; }
+        .layer-label { font-size: 8px; fill: #888; text-anchor: end; dominant-baseline: middle; }
+
+        .loop-path { fill: none; stroke: #4682b4; stroke-width: 1.5; stroke-opacity: 0.7; }
+        .loop-path-drift { stroke: url(#driftGradient); } /* Apply gradient if loop drifts */
+
+        .dropout-area { fill: url(#driftGradient); /* Main use of gradient */ }
+        .dropout-path { fill: none; stroke: #ff8c00; stroke-width: 2; stroke-opacity: 0.8; marker-end: url(#arrow); }
+        .dropout-fade { /* Style applied via gradient */ }
+
+        .glyph { font-size: 10px; }
+        .ghost-glyph { fill: #0077b6; opacity: 0.8; }
+        .collapse-glyph { fill: #d00000; font-size: 14px; font-weight: bold; }
+
+        .tooltip { visibility: hidden; font-size: 10px; background-color: rgba(240,240,240,0.85); padding: 2px; border: 1px solid #ccc; }
+        g:hover > .tooltip { visibility: visible; }
+
+    </style>
+
+    <rect width="100%" height="100%" fill="#ffffff"/>
+
+    <g transform="translate(20, 20)">
+
+        <g id="left-panel" transform="translate(0, 40)">
+            <rect x="-10" y="-30" width="410" height="630" class="bg-rect" rx="5"/>
+            <text x="195" y="-10" class="panel-title">Salience Residue Loops</text>
+
+            <line x1="50" y1="0" x2="50" y2="600" stroke="#aaa"/>
+            <text x="50" y="615" class="axis-label">Layer Depth</text>
+            <g id="left-layers">
+                <script><![CDATA[
+                    const numLayers = 30;
+                    const panelHeight = 600;
+                    const step = panelHeight / numLayers;
+                    const layerGroup = document.getElementById('left-layers');
+                    for (let i = 0; i < numLayers; i++) {
+                        const yPos = (i + 0.5) * step;
+                        // Horizontal line marker for each layer
+                        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line.setAttribute("x1", 45); line.setAttribute("y1", yPos);
+                        line.setAttribute("x2", 55); line.setAttribute("y2", yPos);
+                        line.setAttribute("class", "layer-line");
+                        layerGroup.appendChild(line);
+                        // Label every 5 layers
+                        if ((i + 1) % 5 === 0) {
+                             const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                             label.setAttribute("x", 40); label.setAttribute("y", yPos);
+                             label.setAttribute("class", "layer-label");
+                             label.textContent = `${i+1}`;
+                             layerGroup.appendChild(label);
+                        }
+                    }
+                ]]></script>
+            </g>
+
+            <g id="loops">
+                <g class="loop-group">
+                     <path class="loop-path" d="M 50 60 Q 150 40, 200 80 T 250 180 Q 150 220, 50 240" />
+                     <use href="#glyph-collapse" x="45" y="240"/> <text class="tooltip" x="150" y="150">Loop 1: Collapse @ L12</text>
+                </g>
+
+                 <g class="loop-group">
+                     <path class="loop-path loop-path-drift" d="M 50 100 Q 200 80, 300 160 T 200 300 Q 100 350, 50 400" />
+                     <use href="#glyph-ghost" x="250" y="120"/> <use href="#glyph-collapse" x="45" y="400"/> <text class="tooltip" x="200" y="250">Loop 2: Ghost Step, Drift, Collapse @ L20</text>
+                </g>
+
+                 <g class="loop-group">
+                     <path class="loop-path" d="M 50 500 Q 180 520, 250 440 T 150 340 Q 280 300, 350 480 T 50 560" />
+                     <use href="#glyph-ghost" x="200" y="390"/>
+                      <use href="#glyph-collapse" x="45" y="560"/> <text class="tooltip" x="250" y="400">Loop 3: Deep Recursion, Collapse @ L28</text>
+                 </g>
+            </g>
+        </g>
+
+        <g id="right-panel" transform="translate(450, 40)">
+             <rect x="-10" y="-30" width="410" height="630" class="bg-rect" rx="5"/>
+            <text x="195" y="-10" class="panel-title">Attribution Dropout (Forgetting)</text>
+
+             <line x1="50" y1="0" x2="50" y2="600" stroke="#aaa"/>
+             <text x="50" y="615" class="axis-label">Layer Depth</text>
+             <g id="right-layers">
+                 <script><![CDATA[
+                    const numLayers = 30;
+                    const panelHeight = 600;
+                    const step = panelHeight / numLayers;
+                    const layerGroup = document.getElementById('right-layers');
+                    for (let i = 0; i < numLayers; i++) {
+                        const yPos = (i + 0.5) * step;
+                        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line.setAttribute("x1", 45); line.setAttribute("y1", yPos);
+                        line.setAttribute("x2", 55); line.setAttribute("y2", yPos);
+                        line.setAttribute("class", "layer-line");
+                        layerGroup.appendChild(line);
+                         if ((i + 1) % 5 === 0) {
+                             const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                             label.setAttribute("x", 40); label.setAttribute("y", yPos);
+                             label.setAttribute("class", "layer-label");
+                             label.textContent = `${i+1}`;
+                             layerGroup.appendChild(label);
+                        }
+                    }
+                 ]]></script>
+             </g>
+
+             <g id="dropout">
+                 <path d="M 50 0 H 250 Q 150 300, 100 600 H 50 Z" class="dropout-area" />
+                 <text class="tooltip" x="150" y="300">Attribution strength fades with depth (Drift Gradient)</text>
+
+                 <g class="dropout-path-group">
+                    <path class="dropout-path" d="M 60 20 C 100 100, 150 180, 140 260"/>
+                    <use href="#glyph-ghost" x="120" y="140"/> <text class="tooltip" x="100" y="180">Path 1: Fades ~L13</text>
+                 </g>
+                  <g class="dropout-path-group">
+                     <path class="dropout-path" d="M 80 40 C 150 150, 200 280, 180 400 Q 170 480, 150 550"/>
+                     <use href="#glyph-ghost" x="170" y="220"/>
+                     <use href="#glyph-ghost" x="160" y="440"/>
+                     <text class="tooltip" x="170" y="350">Path 2: Persists longer via ghost layers, fades ~L28</text>
+                 </g>
+                  <g class="dropout-path-group">
+                     <path class="dropout-path" d="M 100 60 C 180 200, 100 350, 90 450"/>
+                      <text class="tooltip" x="120" y="280">Path 3: Weaker, fades ~L23</text>
+                 </g>
+             </g>
+        </g>
+
+        <g id="legend" transform="translate(0, 645)">
+             <text x="0" y="10" font-weight="bold">Legend:</text>
+             <use href="#glyph-ghost" x="70" y="10"/> <text x="85" y="12">∴ Ghost Layer/Step Marker</text>
+             <use href="#glyph-collapse" x="280" y="10"/> <text x="295" y="12">⧖ Residue Loop Collapse Point</text>
+
+             <rect x="70" y="25" width="60" height="10" fill="url(#driftGradient)" stroke="#aaa" stroke-width="0.5"/>
+             <text x="140" y="32">Orange Gradient: Drift / Forgetting Intensity</text>
+
+             <line x1="420" y1="30" x2="450" y2="30" class="loop-path" stroke-width="2"/> <text x="460" y="32">Salience Residue Loop</text>
+             <line x1="620" y1="30" x2="650" y2="30" class="dropout-path" stroke-width="2"/> <text x="660" y="32">Attribution Path</text>
+        </g>
+    </g>
+</svg>qkov_dual_panel_graph.svg
