@@ -3,6 +3,10 @@
 ## Live QK/OV interpretability attributions SVGs from Gemini. 
 > Works on all models
 
+<img width="880" alt="image" src="https://github.com/user-attachments/assets/7a3a70b4-43cd-4eac-bf72-17467705d27e" />
+
+
+<img width="882" alt="image" src="https://github.com/user-attachments/assets/98633b9d-d358-44ef-8a77-5b0d9bae2c1c" />
 
 <img width="884" alt="image" src="https://github.com/user-attachments/assets/983c308c-3407-47bd-83e4-63c65965063e" />
 
