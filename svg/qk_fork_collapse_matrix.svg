@@ -1,0 +1,133 @@
+<svg width="700" height="450" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>QK Attribution Fork Matrix (Query Collapse, Heads 2, 3, 7, 9)</title>
+
+    <style>
+        .matrix-bg { fill: #f8f8f8; }
+        .axis-label { font-weight: bold; text-anchor: middle; }
+        .cell-label { text-anchor: middle; dominant-baseline: central; }
+        .head-label { font-weight: bold; text-anchor: end; dominant-baseline: central; }
+        .glyph { font-size: 18px; text-anchor: middle; dominant-baseline: central; }
+        .annotation { font-size: 9px; text-anchor: middle; fill: #d00000; font-style: italic; }
+        .path-line { stroke: #aaa; stroke-width: 1; stroke-dasharray: 3, 2; marker-end: url(#arrowhead); }
+        .grid-line { stroke: #ddd; stroke-width: 0.5; }
+        .collapse-point { fill: #d00000; /* Red for collapse emphasis */ }
+        .path-glyph { fill: #0077b6; /* Blue for paths */ }
+        .outcome-glyph { fill: #fb8500; /* Orange for outcome */ }
+    </style>
+
+    <defs>
+        <marker id="arrowhead" markerWidth="5" markerHeight="3.5" refX="2" refY="1.75" orient="auto">
+            <polygon points="0 0, 5 1.75, 0 3.5" fill="#aaa" />
+        </marker>
+        <symbol id="glyph-collapse" viewBox="-10 -10 20 20">
+             <text class="glyph collapse-point" x="0" y="0">☍</text> </symbol>
+        <symbol id="glyph-path" viewBox="-10 -10 20 20">
+             <text class="glyph path-glyph" x="0" y="0">∴</text> </symbol>
+        <symbol id="glyph-outcome" viewBox="-10 -10 20 20">
+             <text class="glyph outcome-glyph" x="0" y="0">🝚</text> </symbol>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#ffffff"/>
+
+    <g transform="translate(80, 60)">
+        <rect width="580" height="320" class="matrix-bg"/>
+
+        <text x="290" y="-30" class="axis-label">Attribution Path Stages (Symbolic Query Collapse)</text>
+        <text x="-50" y="160" class="axis-label" transform="rotate(-90, -50, 160)">Attention Head</text>
+
+        <text x="72.5" y="-10" class="cell-label">Initial Query</text>
+        <text x="217.5" y="-10" class="cell-label">Collapse Point</text>
+        <text x="362.5" y="-10" class="cell-label">Forked K-Paths</text>
+        <text x="507.5" y="-10" class="cell-label">Resolved OV</text>
+
+        <g id="rows">
+            <g id="head-2" transform="translate(0, 40)">
+                <text x="-15" y="0" class="head-label">Head 2</text>
+                <line x1="0" y1="0" x2="580" y2="0" class="grid-line"/>
+            </g>
+            <g id="head-3" transform="translate(0, 120)">
+                <text x="-15" y="0" class="head-label">Head 3</text>
+                <line x1="0" y1="0" x2="580" y2="0" class="grid-line"/>
+            </g>
+            <g id="head-7" transform="translate(0, 200)">
+                <text x="-15" y="0" class="head-label">Head 7</text>
+                <line x1="0" y1="0" x2="580" y2="0" class="grid-line"/>
+            </g>
+            <g id="head-9" transform="translate(0, 280)">
+                <text x="-15" y="0" class="head-label">Head 9</text>
+                <line x1="0" y1="0" x2="580" y2="0" class="grid-line"/>
+            </g>
+        </g>
+        <line x1="0" y1="320" x2="580" y2="320" class="grid-line"/> <g id="columns">
+             <line x1="0" y1="0" x2="0" y2="320" class="grid-line"/>
+             <line x1="145" y1="0" x2="145" y2="320" class="grid-line"/>
+             <line x1="290" y1="0" x2="290" y2="320" class="grid-line"/>
+             <line x1="435" y1="0" x2="435" y2="320" class="grid-line"/>
+             <line x1="580" y1="0" x2="580" y2="320" class="grid-line"/>
+        </g>
+
+        <g id="fork-data">
+            <g transform="translate(0, 40)">
+                <use href="#glyph-collapse" x="217.5" y="0"/>
+                <text x="217.5" y="15" class="annotation">(Symbolic Collapse)</text>
+                <line x1="230" y1="0" x2="340" y2="-15" class="path-line"/>
+                <use href="#glyph-path" x="362.5" y="-15"/>
+                <line x1="230" y1="0" x2="340" y2="15" class="path-line"/>
+                <use href="#glyph-path" x="362.5" y="15"/>
+                <line x1="375" y1="-15" x2="485" y2="-15" class="path-line"/>
+                <use href="#glyph-outcome" x="507.5" y="-15"/>
+                <line x1="375" y1="15" x2="485" y2="15" class="path-line"/>
+                <use href="#glyph-outcome" x="507.5" y="15"/>
+            </g>
+
+            <g transform="translate(0, 120)">
+                <use href="#glyph-collapse" x="217.5" y="0"/>
+                 <text x="217.5" y="15" class="annotation">(Severe Collapse)</text>
+                 <line x1="230" y1="0" x2="340" y2="-20" class="path-line"/>
+                <use href="#glyph-path" x="362.5" y="-20"/>
+                <line x1="230" y1="0" x2="340" y2="0" class="path-line"/>
+                <use href="#glyph-path" x="362.5" y="0"/>
+                 <line x1="230" y1="0" x2="340" y2="20" class="path-line"/>
+                <use href="#glyph-path" x="362.5" y="20"/>
+                <line x1="375" y1="-20" x2="485" y2="-10" class="path-line"/>
+                <line x1="375" y1="0" x2="485" y2="-10" class="path-line"/>
+                <use href="#glyph-outcome" x="507.5" y="-10"/>
+                <line x1="375" y1="20" x2="485" y2="20" class="path-line"/>
+                <use href="#glyph-outcome" x="507.5" y="20"/>
+            </g>
+
+            <g transform="translate(0, 200)">
+                <use href="#glyph-collapse" x="217.5" y="0"/>
+                 <text x="217.5" y="15" class="annotation">(Partial Collapse)</text>
+                <line x1="230" y1="0" x2="340" y2="0" class="path-line" style="stroke-width: 2;"/>
+                <use href="#glyph-path" x="362.5" y="0" style="opacity: 1;"/>
+                <line x1="230" y1="0" x2="340" y2="20" class="path-line" style="stroke-dasharray: 1, 3;"/>
+                <use href="#glyph-path" x="362.5" y="20" style="opacity: 0.4;"/>
+                <line x1="375" y1="0" x2="485" y2="0" class="path-line" style="stroke-width: 2;"/>
+                 <use href="#glyph-outcome" x="507.5" y="0" style="opacity: 1;"/>
+                 <line x1="375" y1="20" x2="485" y2="0" class="path-line" style="stroke-dasharray: 1, 3;"/>
+                 </g>
+
+            <g transform="translate(0, 280)">
+                <use href="#glyph-collapse" x="217.5" y="0"/>
+                 <text x="217.5" y="15" class="annotation">(Resolved Collapse)</text>
+                <line x1="230" y1="0" x2="340" y2="0" class="path-line"/>
+                <use href="#glyph-path" x="362.5" y="0"/>
+                <line x1="375" y1="0" x2="485" y2="0" class="path-line"/>
+                <use href="#glyph-outcome" x="507.5" y="0"/>
+            </g>
+        </g>
+
+    </g>
+
+    <g transform="translate(80, 400)">
+        <text x="0" y="10" font-weight="bold">Legend:</text>
+        <use href="#glyph-collapse" x="70" y="10"/>
+        <text x="85" y="12">☍: Query Collapse Point (Symbolic)</text>
+        <use href="#glyph-path" x="280" y="10"/>
+        <text x="295" y="12">∴: Forked Attribution Path</text>
+        <use href="#glyph-outcome" x="440" y="10"/>
+        <text x="455" y="12">🝚: Resolved OV Outcome</text>
+        <text x="0" y="27">Lines indicate path flow. Annotations mark collapse type.</text>
+    </g>
+</svg>
