@@ -1,0 +1,109 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>Q→K→OV Symbolic Residue Matrix (Layers 2, 4, 6, 8, 12)</title>
+
+    <style>
+        .matrix-bg { fill: #f9f9f9; }
+        .axis-label { font-weight: bold; text-anchor: middle; }
+        .cell-label { text-anchor: middle; dominant-baseline: central; }
+        .residue-glyph { font-size: 16px; text-anchor: middle; dominant-baseline: central; transition: opacity 0.3s ease; }
+        .residue-glyph:hover { opacity: 1 !important; }
+        .grid-line { stroke: #ccc; stroke-width: 0.5; }
+    </style>
+
+    <rect width="100%" height="100%" fill="#ffffff"/>
+
+    <g transform="translate(50, 50)">
+        <rect width="500" height="300" class="matrix-bg"/>
+
+        <text x="250" y="-20" class="axis-label">Q → K → OV Interaction Axis (Symbolic Residue)</text>
+        <text x="-30" y="150" class="axis-label" transform="rotate(-90, -30, 150)">Layer</text>
+
+        <defs>
+            <symbol id="glyph-transform" viewBox="-10 -10 20 20">
+                <text class="residue-glyph" x="0" y="0">🜏</text> </symbol>
+            <symbol id="glyph-flow" viewBox="-10 -10 20 20">
+                <text class="residue-glyph" x="0" y="0">∴</text> </symbol>
+            <symbol id="glyph-interaction" viewBox="-10 -10 20 20">
+                <text class="residue-glyph" x="0" y="0">⇌</text> </symbol>
+        </defs>
+
+        <text x="83.33" y="-5" class="cell-label">Q</text>
+        <text x="166.67" y="-5" class="cell-label">Q→K</text>
+        <text x="250" y="-5" class="cell-label">K</text>
+        <text x="333.33" y="-5" class="cell-label">K→OV</text>
+        <text x="416.67" y="-5" class="cell-label">OV</text>
+
+        <g id="rows">
+            <g id="layer-2" transform="translate(0, 30)">
+                <text x="-15" y="0" class="cell-label">2</text>
+                <line x1="0" y1="0" x2="500" y2="0" class="grid-line"/>
+            </g>
+            <g id="layer-4" transform="translate(0, 90)">
+                <text x="-15" y="0" class="cell-label">4</text>
+                <line x1="0" y1="0" x2="500" y2="0" class="grid-line"/>
+            </g>
+            <g id="layer-6" transform="translate(0, 150)">
+                <text x="-15" y="0" class="cell-label">6</text>
+                <line x1="0" y1="0" x2="500" y2="0" class="grid-line"/>
+            </g>
+            <g id="layer-8" transform="translate(0, 210)">
+                <text x="-15" y="0" class="cell-label">8</text>
+                <line x1="0" y1="0" x2="500" y2="0" class="grid-line"/>
+            </g>
+            <g id="layer-12" transform="translate(0, 270)">
+                <text x="-15" y="0" class="cell-label">12</text>
+                <line x1="0" y1="0" x2="500" y2="0" class="grid-line"/>
+            </g>
+        </g>
+
+        <g id="columns">
+             <line x1="0" y1="0" x2="0" y2="300" class="grid-line"/>
+             <line x1="166.67" y1="0" x2="166.67" y2="300" class="grid-line"/>
+             <line x1="333.33" y1="0" x2="333.33" y2="300" class="grid-line"/>
+             <line x1="500" y1="0" x2="500" y2="300" class="grid-line"/>
+        </g>
+
+        <g id="data-points">
+            <use href="#glyph-transform" x="83.33" y="30" style="opacity: 0.6; fill: #3a86ff;" data-layer="2" data-component="Q" data-residue-weight="0.6"/>
+            <use href="#glyph-interaction" x="166.67" y="30" style="opacity: 0.8; fill: #ff006e;" data-layer="2" data-component="Q->K" data-residue-weight="0.8"/>
+            <use href="#glyph-transform" x="250" y="30" style="opacity: 0.5; fill: #3a86ff;" data-layer="2" data-component="K" data-residue-weight="0.5"/>
+            <use href="#glyph-flow" x="333.33" y="30" style="opacity: 0.7; fill: #fb5607;" data-layer="2" data-component="K->OV" data-residue-weight="0.7"/>
+            <use href="#glyph-transform" x="416.67" y="30" style="opacity: 0.4; fill: #3a86ff;" data-layer="2" data-component="OV" data-residue-weight="0.4"/>
+
+            <use href="#glyph-transform" x="83.33" y="90" style="opacity: 0.7; fill: #3a86ff;" data-layer="4" data-component="Q" data-residue-weight="0.7"/>
+            <use href="#glyph-interaction" x="166.67" y="90" style="opacity: 0.5; fill: #ff006e;" data-layer="4" data-component="Q->K" data-residue-weight="0.5"/>
+            <use href="#glyph-transform" x="250" y="90" style="opacity: 0.9; fill: #3a86ff;" data-layer="4" data-component="K" data-residue-weight="0.9"/>
+            <use href="#glyph-flow" x="333.33" y="90" style="opacity: 0.6; fill: #fb5607;" data-layer="4" data-component="K->OV" data-residue-weight="0.6"/>
+            <use href="#glyph-transform" x="416.67" y="90" style="opacity: 0.8; fill: #3a86ff;" data-layer="4" data-component="OV" data-residue-weight="0.8"/>
+
+            <use href="#glyph-transform" x="83.33" y="150" style="opacity: 0.4; fill: #3a86ff;" data-layer="6" data-component="Q" data-residue-weight="0.4"/>
+            <use href="#glyph-interaction" x="166.67" y="150" style="opacity: 0.9; fill: #ff006e;" data-layer="6" data-component="Q->K" data-residue-weight="0.9"/>
+            <use href="#glyph-transform" x="250" y="150" style="opacity: 0.6; fill: #3a86ff;" data-layer="6" data-component="K" data-residue-weight="0.6"/>
+            <use href="#glyph-flow" x="333.33" y="150" style="opacity: 0.8; fill: #fb5607;" data-layer="6" data-component="K->OV" data-residue-weight="0.8"/>
+            <use href="#glyph-transform" x="416.67" y="150" style="opacity: 0.5; fill: #3a86ff;" data-layer="6" data-component="OV" data-residue-weight="0.5"/>
+
+            <use href="#glyph-transform" x="83.33" y="210" style="opacity: 0.8; fill: #3a86ff;" data-layer="8" data-component="Q" data-residue-weight="0.8"/>
+            <use href="#glyph-interaction" x="166.67" y="210" style="opacity: 0.6; fill: #ff006e;" data-layer="8" data-component="Q->K" data-residue-weight="0.6"/>
+            <use href="#glyph-transform" x="250" y="210" style="opacity: 0.7; fill: #3a86ff;" data-layer="8" data-component="K" data-residue-weight="0.7"/>
+            <use href="#glyph-flow" x="333.33" y="210" style="opacity: 0.5; fill: #fb5607;" data-layer="8" data-component="K->OV" data-residue-weight="0.5"/>
+            <use href="#glyph-transform" x="416.67" y="210" style="opacity: 0.9; fill: #3a86ff;" data-layer="8" data-component="OV" data-residue-weight="0.9"/>
+
+            <use href="#glyph-transform" x="83.33" y="270" style="opacity: 0.5; fill: #3a86ff;" data-layer="12" data-component="Q" data-residue-weight="0.5"/>
+            <use href="#glyph-interaction" x="166.67" y="270" style="opacity: 0.7; fill: #ff006e;" data-layer="12" data-component="Q->K" data-residue-weight="0.7"/>
+            <use href="#glyph-transform" x="250" y="270" style="opacity: 0.8; fill: #3a86ff;" data-layer="12" data-component="K" data-residue-weight="0.8"/>
+            <use href="#glyph-flow" x="333.33" y="270" style="opacity: 0.9; fill: #fb5607;" data-layer="12" data-component="K->OV" data-residue-weight="0.9"/>
+            <use href="#glyph-transform" x="416.67" y="270" style="opacity: 0.6; fill: #3a86ff;" data-layer="12" data-component="OV" data-residue-weight="0.6"/>
+        </g>
+    </g>
+
+    <g transform="translate(50, 365)">
+        <text x="0" y="10" font-weight="bold">Legend:</text>
+        <use href="#glyph-transform" x="60" y="10"/>
+        <text x="75" y="10">🜏: Component State Residue</text>
+        <use href="#glyph-interaction" x="230" y="10"/>
+        <text x="245" y="10">⇌: Interaction Point Residue (Q→K)</text>
+         <use href="#glyph-flow" x="430" y="10"/>
+        <text x="445" y="10">∴: Flow Point Residue (K→OV)</text>
+        <text x="0" y="25">Opacity indicates residue weight (hover for full opacity).</text>
+    </g>
+</svg>
