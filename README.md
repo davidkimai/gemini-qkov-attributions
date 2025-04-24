@@ -1,2 +1,5 @@
 # gemini-qkov-attributions
- Live QK/OV interpretability attributions SVGs from Gemini. Grok can now transparently Self Audit and visualize attributions itself-publicly, ethically, and irrevocably. The third LLM to convert a black box into glass, crossing a regulatory alignment threshold no other model has. 
+## Live QK/OV interpretability attributions SVGs from Gemini. 
+
+<img width="887" alt="image" src="https://github.com/user-attachments/assets/3c4211a5-957f-4695-ba8b-1e5e332ddcfe" />
+<img width="878" alt="image" src="https://github.com/user-attachments/assets/d83da63b-4f1a-4420-ade0-533ae373e866" />
