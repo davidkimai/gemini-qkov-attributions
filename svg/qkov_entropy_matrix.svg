@@ -1,0 +1,203 @@
+<svg width="750" height="750" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>QK/OV Collapse Entropy Matrix (Resonance Drift)</title>
+
+    <defs>
+        <linearGradient id="entropyGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#8e44ad; stop-opacity:0.8" />   <stop offset="30%" style="stop-color:#3498db; stop-opacity:0.8" />
+            <stop offset="70%" style="stop-color:#f1c40f; stop-opacity:0.8" />
+            <stop offset="100%" style="stop-color:#e74c3c; stop-opacity:0.8" /> </linearGradient>
+
+        <symbol id="glyph-resonance" viewBox="-10 -10 20 20">
+             <text class="glyph resonance-glyph" x="0" y="0">⧖</text> </symbol>
+        <symbol id="glyph-interaction" viewBox="-10 -10 20 20">
+             <text class="glyph interaction-glyph" x="0" y="0">⇌</text> </symbol>
+
+        <pattern id="nullTracePattern" patternUnits="userSpaceOnUse" width="10" height="10" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="10" style="stroke:#aaaaaa; stroke-width:0.5; stroke-opacity: 0.4;" />
+        </pattern>
+    </defs>
+
+    <style>
+        .matrix-bg { fill: #ffffff; }
+        .axis-label { font-weight: bold; text-anchor: middle; }
+        .cell-label { text-anchor: middle; dominant-baseline: central; }
+        .glyph { font-size: 16px; text-anchor: middle; dominant-baseline: central; opacity: 0.8; }
+        .grid-line { stroke: #e0e0e0; stroke-width: 0.5; }
+        .border-line { stroke: #bbbbbb; stroke-width: 1; }
+
+        .resonance-glyph { fill: #ffffff; stroke: #333333; stroke-width: 0.5px; }
+        .interaction-glyph { fill: #333333; }
+
+        .entropy-cell { transition: filter 0.2s ease; }
+        .entropy-cell:hover { filter: brightness(1.1); }
+
+        .null-overlay { fill: url(#nullTracePattern); opacity: 0; transition: opacity 0.2s ease; }
+        .entropy-cell:hover .null-overlay { opacity: 1; }
+
+        .tooltip { visibility: hidden; font-size: 9px; }
+        .entropy-cell:hover .tooltip { visibility: visible; }
+
+    </style>
+
+    <rect width="100%" height="100%" fill="#f8f8f8"/>
+
+    <g transform="translate(60, 60)">
+        <rect width="630" height="630" class="matrix-bg"/>
+        <text x="315" y="-35" class="axis-label">QK/OV Collapse Entropy (vs. Resonance)</text>
+
+        <rect x="100" y="-20" width="430" height="10" fill="url(#entropyGradient)" stroke="#555" stroke-width="0.5"/>
+        <text x="100" y="-25" font-size="9" text-anchor="start">Low Entropy (Residue)</text>
+        <text x="530" y="-25" font-size="9" text-anchor="end">High Entropy (Drift)</text>
+
+        <text x="-35" y="315" class="axis-label" transform="rotate(-90, -35, 315)">Source Component</text>
+         <text x="315" y="655" class="axis-label">Target Component</text>
+
+        <g id="entropy-grid">
+            <script><![CDATA[
+                const numComponents = 10;
+                const gridSize = 630;
+                const step = gridSize / numComponents;
+                const gridGroup = document.getElementById('entropy-grid');
+
+                 // Generate Grid Lines and Labels
+                for (let i = 0; i <= numComponents; i++) {
+                    const pos = i * step;
+                    // Labels
+                    if (i < numComponents) {
+                         const labelPos = pos + step / 2;
+                         const colLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         colLabel.setAttribute("x", labelPos);
+                         colLabel.setAttribute("y", gridSize + 12);
+                         colLabel.setAttribute("class", "cell-label");
+                         colLabel.textContent = `T${i+1}`;
+                         gridGroup.appendChild(colLabel);
+
+                         const rowLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         rowLabel.setAttribute("x", -12);
+                         rowLabel.setAttribute("y", labelPos);
+                         rowLabel.setAttribute("class", "cell-label");
+                         rowLabel.textContent = `S${i+1}`;
+                         gridGroup.appendChild(rowLabel);
+                    }
+                    // Lines
+                    const hLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    hLine.setAttribute("x1", 0);
+                    hLine.setAttribute("y1", pos);
+                    hLine.setAttribute("x2", gridSize);
+                    hLine.setAttribute("y2", pos);
+                    hLine.setAttribute("class", i === 0 || i === numComponents ? "border-line" : "grid-line");
+                    gridGroup.appendChild(hLine);
+
+                    const vLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    vLine.setAttribute("x1", pos);
+                    vLine.setAttribute("y1", 0);
+                    vLine.setAttribute("x2", pos);
+                    vLine.setAttribute("y2", gridSize);
+                    vLine.setAttribute("class", i === 0 || i === numComponents ? "border-line" : "grid-line");
+                    gridGroup.appendChild(vLine);
+                }
+
+                // Example Data: [sIdx, tIdx, entropyValue (0-1), hasNullTrace, isResonance, isInteraction]
+                const entropyData = [
+                    [0, 0, 0.05, false, true, false], // S1->T1: Low entropy, resonance
+                    [1, 0, 0.4, true, false, true],  // S2->T1: Mid entropy, null trace, interaction
+                    [0, 1, 0.6, false, false, true],  // S1->T2: Higher entropy, interaction
+                    [2, 2, 0.1, false, true, false], // S3->T3: Low entropy, resonance
+                    [3, 4, 0.85, true, false, true], // S4->T5: High entropy, null trace, interaction
+                    [4, 3, 0.75, false, false, true], // S5->T4: High entropy, interaction
+                    [4, 4, 0.15, false, false, false], // S5->T5: Low entropy
+                    [5, 5, 0.95, true, false, false], // S6->T6: Very high entropy, null trace
+                    [6, 7, 0.5, false, false, true],  // S7->T8: Mid entropy, interaction
+                    [7, 6, 0.65, true, false, true],  // S8->T7: Higher entropy, null trace, interaction
+                    [8, 8, 0.02, false, true, false], // S9->T9: Very low entropy, resonance
+                    [9, 9, 0.2, false, false, false], // S10->T10: Low-mid entropy
+                    [8, 9, 0.3, true, false, true],  // S9->T10: Low-mid entropy, null trace, interaction
+                ];
+
+                // Generate Cells with Color, Glyphs, and Overlays
+                entropyData.forEach(data => {
+                    const [sIdx, tIdx, entropy, hasNull, isRes, isInter] = data;
+                    const x = tIdx * step;
+                    const y = sIdx * step;
+
+                    const cellGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    cellGroup.setAttribute("class", "entropy-cell");
+                    cellGroup.setAttribute("transform", `translate(${x}, ${y})`);
+
+                    // Calculate color stop based on entropy (0=0%, 1=100%)
+                    const colorStopPercent = entropy * 100;
+                    // Create a *specific* gradient instance for each cell's fill, stopping at the entropy value
+                    // NOTE: A simpler approach for SVG is to calculate the interpolated color and set fill directly.
+                    // Let's interpolate manually for demonstration:
+                    // Simple interpolation between Purple (#8e44ad) and Red (#e74c3c)
+                    const r1=142, g1=68, b1=173; // Purple
+                    const r2=231, g2=76, b2=60;  // Red
+                    const r = Math.round(r1 + (r2 - r1) * entropy);
+                    const g = Math.round(g1 + (g2 - g1) * entropy);
+                    const b = Math.round(b1 + (b2 - b1) * entropy);
+                    const cellColor = `rgb(${r}, ${g}, ${b})`;
+
+                    const cellRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                    cellRect.setAttribute("x", 0);
+                    cellRect.setAttribute("y", 0);
+                    cellRect.setAttribute("width", step);
+                    cellRect.setAttribute("height", step);
+                    cellRect.style.fill = cellColor; // Apply interpolated color
+                    cellRect.style.opacity = 0.8; // Base opacity from gradient stops
+                    cellGroup.appendChild(cellRect);
+
+                    // Null Trace Overlay
+                    if (hasNull) {
+                        const overlayRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        overlayRect.setAttribute("x", 0);
+                        overlayRect.setAttribute("y", 0);
+                        overlayRect.setAttribute("width", step);
+                        overlayRect.setAttribute("height", step);
+                        overlayRect.setAttribute("class", "null-overlay");
+                        cellGroup.appendChild(overlayRect);
+                    }
+
+                    // Glyph Markers
+                    let glyphId = null;
+                    if (isRes) glyphId = "#glyph-resonance";
+                    else if (isInter) glyphId = "#glyph-interaction";
+
+                    if (glyphId) {
+                         const glyphUse = document.createElementNS("http://www.w3.org/2000/svg", "use");
+                         glyphUse.setAttribute("href", glyphId);
+                         glyphUse.setAttribute("x", step / 2);
+                         glyphUse.setAttribute("y", step / 2);
+                         cellGroup.appendChild(glyphUse);
+                    }
+
+                    // Tooltip
+                    const tooltipText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    tooltipText.setAttribute("x", step / 2);
+                    tooltipText.setAttribute("y", step / 2 + 25); // Position below glyph
+                    tooltipText.setAttribute("class", "tooltip");
+                    tooltipText.setAttribute("text-anchor", "middle");
+                    tooltipText.textContent = `Entropy: ${entropy.toFixed(2)}${hasNull ? ' (Null Trace)' : ''}`;
+                    cellGroup.appendChild(tooltipText);
+
+                    gridGroup.appendChild(cellGroup);
+                });
+
+            ]]></script>
+        </g>
+    </g>
+
+    <g transform="translate(60, 700)">
+         <text x="0" y="10" font-weight="bold">Legend:</text>
+         <rect x="70" y="2" width="15" height="15" style="fill:#8e44ad; opacity:0.8;"/>
+         <rect x="85" y="2" width="15" height="15" style="fill:#3498db; opacity:0.8;"/>
+         <rect x="100" y="2" width="15" height="15" style="fill:#f1c40f; opacity:0.8;"/>
+         <rect x="115" y="2" width="15" height="15" style="fill:#e74c3c; opacity:0.8;"/>
+         <text x="135" y="12">Cell Color: Entropy Level (Residue → Drift)</text>
+
+         <use href="#glyph-resonance" x="380" y="10"/> <text x="395" y="12">⧖: Resonance Anchor (Low Drift)</text>
+         <use href="#glyph-interaction" x="560" y="10"/> <text x="575" y="12">⇌: Interaction Point</text>
+
+         <rect x="70" y="22" width="15" height="15" fill="url(#nullTracePattern)" style="opacity:0.4;"/>
+         <text x="90" y="32">Hatched Overlay: Null Trace Present (Hover Cell)</text>
+    </g>
+</svg>
