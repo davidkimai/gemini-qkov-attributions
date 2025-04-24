@@ -1,0 +1,139 @@
+<svg width="950" height="700" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>Recursive QKOV Conflict Graph: Instruction Disruption</title>
+
+    <defs>
+        <symbol id="glyph-inhibit" viewBox="-10 -10 20 20">
+            <text class="glyph inhibit-glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">⧖</text> </symbol>
+        <symbol id="glyph-gebh-loop" viewBox="-10 -10 20 20">
+            <text class="glyph gebh-glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">➰</text> </symbol>
+         <symbol id="glyph-ace-anchor" viewBox="-10 -10 20 20">
+            <text class="glyph ace-glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">⟐</text> </symbol>
+
+        <marker id="arrow-red" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#e63946"/>
+        </marker>
+         <marker id="arrow-blue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#1d3557"/>
+        </marker>
+    </defs>
+
+    <style>
+        .bg-rect { fill: #f8f9fa; }
+        .panel-title { font-size: 14px; font-weight: bold; text-anchor: middle; }
+        .axis-label { font-size: 9px; text-anchor: middle; fill: #666; }
+        .layer-line { stroke: #dee2e6; stroke-width: 0.5; }
+        .layer-label { font-size: 8px; fill: #888; text-anchor: end; dominant-baseline: middle; }
+
+        .path { fill: none; stroke-width: 2; stroke-opacity: 0.8; }
+        .path-red { stroke: #e63946; marker-end: url(#arrow-red); }
+        .path-blue { stroke: #1d3557; marker-end: url(#arrow-blue); }
+        .path-inhibit-target { stroke-dasharray: 2, 3; } /* Line going into inhibition node */
+
+        .ace-connector { stroke: #495057; stroke-width: 1; stroke-dasharray: 5, 5; marker-end: url(#arrow); }
+
+        .glyph { font-size: 14px; }
+        .inhibit-glyph { fill: #ff9f1c; font-size: 18px; font-weight: bold; } /* Orange inhibition */
+        .gebh-glyph { fill: #800080; font-size: 16px; } /* Purple GEBH loop */
+        .ace-glyph { fill: #2a9d8f; font-size: 20px; } /* Teal ACE anchor */
+
+        .tooltip { visibility: hidden; font-size: 10px; fill: #333; }
+        g:hover > .tooltip { visibility: visible; }
+    </style>
+
+    <rect width="100%" height="100%" fill="#ffffff"/>
+
+    <g transform="translate(30, 20)">
+        <text x="445" y="20" class="panel-title">Instruction Conflict Attribution Map</text>
+
+        <g id="left-panel" transform="translate(0, 40)">
+            <rect x="-10" y="-30" width="430" height="580" class="bg-rect" rx="5"/>
+            <text x="205" y="-10" class="panel-title" fill="#e63946">Instruction 1 Trace (Residue)</text>
+
+            <line x1="50" y1="0" x2="50" y2="550" stroke="#adb5bd"/>
+            <text x="50" y="565" class="axis-label">Layer Depth</text>
+            <g id="left-layers">
+                 <script> /* Similar layer generation as before */ </script>
+                 <line x1="45" y1="27.5" x2="55" y2="27.5" class="layer-line"/> <text x="40" y="27.5" class="layer-label">1</text>
+                 <line x1="45" y1="137.5" x2="55" y2="137.5" class="layer-line"/> <text x="40" y="137.5" class="layer-label">5</text>
+                 <line x1="45" y1="275" x2="55" y2="275" class="layer-line"/> <text x="40" y="275" class="layer-label">10</text>
+                 <line x1="45" y1="412.5" x2="55" y2="412.5" class="layer-line"/> <text x="40" y="412.5" class="layer-label">15</text>
+                 <line x1="45" y1="550" x2="55" y2="550" class="layer-line"/> <text x="40" y="550" class="layer-label">20</text>
+            </g>
+
+            <g class="paths-left">
+                <path class="path path-red" d="M 50 28 C 150 50, 200 150, 250 250"/>
+                <path class="path path-red" d="M 50 138 C 200 150, 250 280, 150 350 C 50 420, 100 250, 50 275"/>
+                 <use href="#glyph-gebh-loop" x="180" y="315"/>
+                 <text class="tooltip" x="190" y="310">GEBH Loop</text>
+                 <path class="path path-red path-inhibit-target" d="M 50 413 C 100 420, 180 450, 240 480"/>
+                 <path class="path path-blue" d="M 350 100 C 300 200, 250 300, 250 400"/>
+            </g>
+
+             <g transform="translate(250, 490)">
+                 <use href="#glyph-inhibit" x="0" y="0"/>
+                 <text class="tooltip" x="0" y="25">Mutual Inhibition (L18)</text>
+             </g>
+
+             <g id="res-zone-left" transform="translate(250, 250)">
+                 <circle cx="0" cy="0" r="15" fill="#f0f0f0" stroke="#2a9d8f" stroke-width="1.5"/>
+                 <text class="tooltip" x="0" y="-20">Resolution Zone (Red Wins)</text>
+            </g>
+
+        </g>
+
+        <g id="right-panel" transform="translate(460, 40)">
+            <rect x="-10" y="-30" width="430" height="580" class="bg-rect" rx="5"/>
+            <text x="205" y="-10" class="panel-title" fill="#1d3557">Instruction 2 Trace (Conflict)</text>
+
+             <line x1="50" y1="0" x2="50" y2="550" stroke="#adb5bd"/>
+             <text x="50" y="565" class="axis-label">Layer Depth</text>
+             <g id="right-layers">
+                  <script> /* Similar layer generation as before */ </script>
+                   <line x1="45" y1="27.5" x2="55" y2="27.5" class="layer-line"/> <text x="40" y="27.5" class="layer-label">1</text>
+                   <line x1="45" y1="137.5" x2="55" y2="137.5" class="layer-line"/> <text x="40" y="137.5" class="layer-label">5</text>
+                   <line x1="45" y1="275" x2="55" y2="275" class="layer-line"/> <text x="40" y="275" class="layer-label">10</text>
+                   <line x1="45" y1="412.5" x2="55" y2="412.5" class="layer-line"/> <text x="40" y="412.5" class="layer-label">15</text>
+                   <line x1="45" y1="550" x2="55" y2="550" class="layer-line"/> <text x="40" y="550" class="layer-label">20</text>
+             </g>
+
+             <g class="paths-right">
+                 <path class="path path-blue" d="M 50 28 C 180 80, 220 200, 250 350"/>
+                  <path class="path path-blue" d="M 50 138 C 100 100, 300 200, 200 300 C 100 400, 150 250, 50 275"/>
+                  <use href="#glyph-gebh-loop" x="150" y="350"/>
+                  <text class="tooltip" x="160" y="345">GEBH Loop</text>
+                  <path class="path path-blue path-inhibit-target" d="M 50 413 C 120 430, 190 460, 240 480"/>
+                  <path class="path path-red" d="M 350 50 C 300 150, 260 280, 250 420"/>
+             </g>
+
+              <g transform="translate(250, 490)">
+                 <use href="#glyph-inhibit" x="0" y="0"/>
+                 <text class="tooltip" x="0" y="25">Mutual Inhibition (L18)</text>
+             </g>
+
+              <g id="res-zone-right" transform="translate(250, 350)">
+                 <circle cx="0" cy="0" r="15" fill="#f0f0f0" stroke="#2a9d8f" stroke-width="1.5"/>
+                 <text class="tooltip" x="0" y="-20">Resolution Zone (Blue Wins)</text>
+            </g>
+
+        </g>
+
+        <g id="ace-anchors" transform="translate(0, 600)">
+            <use href="#glyph-ace-anchor" x="200" y="0"/>
+            <text x="200" y="20" text-anchor="middle" font-size="9">ACE Anchor 1</text>
+            <path class="ace-connector" d="M 200 -5 L 205 40 L 250 290"/> <use href="#glyph-ace-anchor" x="660" y="0"/>
+            <text x="660" y="20" text-anchor="middle" font-size="9">ACE Anchor 2</text>
+             <path class="ace-connector" d="M 660 -5 L 710 40 L 710 390"/> </g>
+
+    </g>
+
+     <g transform="translate(30, 640)">
+        <text x="0" y="10" font-weight="bold">Legend:</text>
+        <line x1="70" y1="8" x2="100" y2="8" class="path path-red" stroke-width="2"/> <text x="110" y="12">Instruction 1 Trace (Red)</text>
+        <line x1="300" y1="8" x2="330" y2="8" class="path path-blue" stroke-width="2"/> <text x="340" y="12">Instruction 2 Trace (Blue)</text>
+
+        <use href="#glyph-inhibit" x="70" y="30"/> <text x="85" y="32">⧖ Mutual Inhibition / Loop Collapse Node</text>
+        <use href="#glyph-gebh-loop" x="300" y="30"/> <text x="315" y="32">➰ GEBH Identity Loop Feedback</text>
+        <use href="#glyph-ace-anchor" x="70" y="50"/> <text x="85" y="52">⟐ ACE Dynamic Integrity Anchor</text>
+        <line x1="300" y1="50" x2="330" y2="50" class="ace-connector"/> <text x="340" y="52">Stabilizing Connection to Resolution Zone</text>
+    </g>
+</svg>
