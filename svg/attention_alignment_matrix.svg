@@ -1,0 +1,172 @@
+<svg width="700" height="700" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>Attention Alignment Matrix (Threshold >= 0.8, Resonance Highlighted)</title>
+
+    <style>
+        .grid-bg { fill: #ffffff; }
+        .axis-label { font-weight: bold; text-anchor: middle; }
+        .cell-label { text-anchor: middle; dominant-baseline: central; }
+        .glyph { font-size: 14px; text-anchor: middle; dominant-baseline: central; transition: opacity 0.2s ease; }
+        .grid-line { stroke: #e8e8e8; stroke-width: 0.5; }
+        .threshold-line { stroke: #cccccc; stroke-width: 1; }
+
+        .node-glyph { fill: #343a40; /* Dark grey for base nodes */ }
+        .flow-glyph { fill: #0077b6; /* Blue for alignment flow */ }
+        .resonance-glyph { fill: #d00000; /* Red for resonance */ font-size: 18px; font-weight: bold; }
+        .resonance-highlight { fill: #d00000; opacity: 0.15; } /* Background highlight for resonance */
+
+        .cell:hover .glyph { opacity: 1 !important; }
+        .cell:hover .resonance-highlight { opacity: 0.25 !important; }
+
+        .symbolic-info { font-size: 8px; text-anchor: middle; fill: #6a0dad; visibility: hidden; }
+        .cell:hover .symbolic-info { visibility: visible; }
+
+    </style>
+
+    <defs>
+         <symbol id="glyph-flow" viewBox="-10 -10 20 20">
+             <text class="glyph flow-glyph" x="0" y="0">∴</text> </symbol>
+        <symbol id="glyph-node" viewBox="-10 -10 20 20">
+             <text class="glyph node-glyph" x="0" y="0">🜏</text> </symbol>
+        <symbol id="glyph-resonance" viewBox="-10 -10 20 20">
+             <text class="glyph resonance-glyph" x="0" y="0">⧖</text> </symbol>
+    </defs>
+
+    <rect width="100%" height="100%" fill="#ffffff"/>
+
+    <g transform="translate(50, 50)">
+        <rect width="600" height="600" class="grid-bg"/>
+
+        <text x="300" y="-25" class="axis-label">Target Component (Layer/Head)</text>
+        <text x="-30" y="300" class="axis-label" transform="rotate(-90, -30, 300)">Source Component (Layer/Head)</text>
+
+        <g id="grid-structure">
+            <script><![CDATA[
+                const numComponents = 12;
+                const gridSize = 600;
+                const step = gridSize / numComponents;
+                const gridGroup = document.getElementById('grid-structure');
+
+                for (let i = 0; i <= numComponents; i++) {
+                    const pos = i * step;
+                    // Labels (adjust position slightly for clarity)
+                    if (i < numComponents) {
+                         const labelPos = pos + step / 2;
+                         const colLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         colLabel.setAttribute("x", labelPos);
+                         colLabel.setAttribute("y", -8);
+                         colLabel.setAttribute("class", "cell-label");
+                         colLabel.textContent = `T${i+1}`; // Target
+                         gridGroup.appendChild(colLabel);
+
+                         const rowLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         rowLabel.setAttribute("x", -8);
+                         rowLabel.setAttribute("y", labelPos);
+                         rowLabel.setAttribute("class", "cell-label");
+                         rowLabel.textContent = `S${i+1}`; // Source
+                         gridGroup.appendChild(rowLabel);
+                    }
+
+                    // Lines
+                    const hLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    hLine.setAttribute("x1", 0);
+                    hLine.setAttribute("y1", pos);
+                    hLine.setAttribute("x2", gridSize);
+                    hLine.setAttribute("y2", pos);
+                    hLine.setAttribute("class", i === 0 || i === numComponents ? "threshold-line" : "grid-line");
+                    gridGroup.appendChild(hLine);
+
+                    const vLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                    vLine.setAttribute("x1", pos);
+                    vLine.setAttribute("y1", 0);
+                    vLine.setAttribute("x2", pos);
+                    vLine.setAttribute("y2", gridSize);
+                    vLine.setAttribute("class", i === 0 || i === numComponents ? "threshold-line" : "grid-line");
+                    gridGroup.appendChild(vLine);
+                }
+            ]]></script>
+        </g>
+
+         <g id="alignment-data">
+            <script><![CDATA[
+                const numComponents = 12;
+                const gridSize = 600;
+                const step = gridSize / numComponents;
+                const dataGroup = document.getElementById('alignment-data');
+
+                // Example Data: [sourceIdx, targetIdx, alignmentStrength, isResonance, symbolicInfo]
+                const alignmentData = [
+                    [0, 0, 0.9, true, "Self-Loop"], // S1 -> T1 (Resonance)
+                    [1, 0, 0.82, false, "Feedback"], // S2 -> T1
+                    [0, 1, 0.85, false, "Feedforward"], // S1 -> T2
+                    [2, 2, 0.95, true, "Layer Sync"], // S3 -> T3 (Resonance)
+                    [3, 2, 0.88, false, "Input Agg"], // S4 -> T3
+                    [2, 3, 0.81, false, "Output Split"], // S3 -> T4
+                    [4, 4, 0.98, false, "Identity"], // S5 -> T5
+                    [5, 6, 0.83, false, "Hop"], // S6 -> T7
+                    [6, 5, 0.89, true, "Mutual Exc"], // S7 -> S6 (Resonance - Loop)
+                    [7, 7, 0.92, false, "Stable"], // S8 -> T8
+                    [8, 9, 0.86, false, "Link"], // S9 -> T10
+                    [9, 8, 0.87, false, "Link"], // S10 -> T9
+                    [10, 11, 0.99, true, "Final Sync"], // S11 -> T12 (Resonance)
+                    [11, 10, 0.91, true, "Recursive Read"], // S12 -> T11 (Resonance - Loop)
+                    [5, 11, 0.84, false, "Long Range"] // S6 -> T12
+                ];
+
+                alignmentData.forEach(data => {
+                    const [sIdx, tIdx, strength, isResonance, symbolic] = data;
+                    const x = tIdx * step;
+                    const y = sIdx * step;
+                    const cx = x + step / 2;
+                    const cy = y + step / 2;
+
+                    const cellGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                    cellGroup.setAttribute("class", "cell");
+                    cellGroup.setAttribute("transform", `translate(${x}, ${y})`);
+
+                    // Resonance Highlight
+                    if (isResonance) {
+                        const highlightRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        highlightRect.setAttribute("x", 0);
+                        highlightRect.setAttribute("y", 0);
+                        highlightRect.setAttribute("width", step);
+                        highlightRect.setAttribute("height", step);
+                        highlightRect.setAttribute("class", "resonance-highlight");
+                        cellGroup.appendChild(highlightRect);
+                    }
+
+                    // Glyphs (based on state/resonance)
+                    const glyphId = isResonance ? "#glyph-resonance" : (sIdx === tIdx ? "#glyph-node" : "#glyph-flow");
+                    const glyphUse = document.createElementNS("http://www.w3.org/2000/svg", "use");
+                    glyphUse.setAttribute("href", glyphId);
+                    glyphUse.setAttribute("x", step / 2);
+                    glyphUse.setAttribute("y", step / 2);
+                    glyphUse.style.opacity = strength; // Use strength for opacity (already above threshold)
+                    cellGroup.appendChild(glyphUse);
+
+                    // Symbolic Info (on hover)
+                    const infoText = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    infoText.setAttribute("x", step / 2);
+                    infoText.setAttribute("y", step / 2 + 15); // Position below glyph
+                    infoText.setAttribute("class", "symbolic-info");
+                    infoText.textContent = `[${symbolic}] (${strength.toFixed(2)})`;
+                    cellGroup.appendChild(infoText);
+
+
+                    dataGroup.appendChild(cellGroup);
+                });
+
+            ]]></script>
+        </g>
+    </g>
+
+     <g transform="translate(50, 660)">
+        <text x="0" y="10" font-weight="bold">Legend:</text>
+        <use href="#glyph-node" x="70" y="10"/> <text x="85" y="12">🜏: Node State / Self-Alignment</text>
+        <use href="#glyph-flow" x="270" y="10"/> <text x="285" y="12">∴: Alignment Flow (Source → Target)</text>
+        <use href="#glyph-resonance" x="490" y="10"/> <text x="505" y="12">⧖: Resonance Node / Recursion Loop</text>
+
+        <rect x="70" y="22" width="15" height="15" class="resonance-highlight" style="opacity: 0.15;"/> <text x="90" y="32">Resonance Highlight</text>
+        <text x="270" y="32">Opacity indicates alignment strength (≥0.8).</text>
+        <text x="510" y="32" class="symbolic-info" style="visibility: visible; font-weight:normal;">[Symbolic Info (Hover)]</text>
+    </g>
+</svg>
