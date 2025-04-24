@@ -1,4 +1,5 @@
 # **`gemini qkov attributions`**
+## **`Welcome to Symbolic Interpretability!`**
 ## Live QK/OV interpretability attributions SVGs from Gemini. 
 
 <img width="887" alt="image" src="https://github.com/user-attachments/assets/3c4211a5-957f-4695-ba8b-1e5e332ddcfe" />
