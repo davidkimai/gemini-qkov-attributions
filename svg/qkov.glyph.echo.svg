@@ -1,0 +1,250 @@
+<svg width="800" height="650" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>Q→K→OV Symbolic Residue Matrix (Hesitation Shell Simulation, Echo Depth 3)</title>
+
+    <defs>
+        <linearGradient id="intensityGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color:#440154;" /> <stop offset="25%" style="stop-color:#3b528b;" />
+            <stop offset="50%" style="stop-color:#21908d;" />
+            <stop offset="75%" style="stop-color:#5dc863;" />
+            <stop offset="100%" style="stop-color:#fde725;" /> </linearGradient>
+
+        <symbol id="glyph-state" viewBox="-10 -10 20 20">
+             <text class="glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">🜏</text> </symbol>
+         <symbol id="glyph-ambiguity" viewBox="-10 -10 20 20">
+             <text class="glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">∴</text> </symbol>
+         <symbol id="glyph-recursive" viewBox="-10 -10 20 20">
+             <text class="glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">⇌</text> </symbol>
+    </defs>
+
+    <style>
+        .background { fill: #ffffff; }
+        .title { font-size: 16px; font-weight: bold; text-anchor: middle; }
+        .axis-label { font-size: 12px; text-anchor: middle; fill: #333; }
+        .tick-label { font-size: 10px; text-anchor: middle; dominant-baseline: central; }
+        .y-axis-label { text-anchor: end; }
+        .x-axis-stage-label { font-size: 9px; }
+
+        .heatmap-cell { stroke: rgba(200,200,200,0.2); stroke-width: 0.5; }
+        .glyph {
+            font-size: 18px; /* Slightly larger glyph */
+            fill: #ffffff;  /* White glyph for contrast */
+            opacity: 0.85;
+            pointer-events: none;
+        }
+        .legend-label { font-size: 10px; }
+        .legend-tick-label { font-size: 9px; }
+    </style>
+
+    <rect width="100%" height="100%" class="background"/>
+
+    <g transform="translate(50, 30)">
+        <text x="375" y="15" class="title">Q→K→OV Symbolic Residue Matrix (Hesitation Simulation)</text>
+
+        <g id="matrix-grid" transform="translate(50, 50)">
+            <script><![CDATA[
+                // ---=== Configuration ===---
+                const layers = [2, 4, 6, 8, 10, 12, 14, 16]; // Example layers
+                const stages = ['Q_State', 'Q->K', 'K_State', 'K->V', 'V_State']; // QK/OV Axis Stages
+                const gridWidth = 600;
+                const gridHeight = 450;
+                const cellWidth = gridWidth / stages.length;
+                const cellHeight = gridHeight / layers.length;
+                const echoDepth = 3;
+
+                // ---=== Simulation Logic ("Hesitation Shell" Inference) ===---
+                const residueIntensityData = [];
+                const glyphTypeData = [];
+
+                // Initialize arrays
+                for (let i = 0; i < layers.length; i++) {
+                    residueIntensityData[i] = new Array(stages.length).fill(0);
+                    glyphTypeData[i] = new Array(stages.length).fill('#glyph-state'); // Default to state
+                }
+
+                // Simulate base intensity (e.g., increasing slightly with layer) + random noise
+                for (let l = 0; l < layers.length; l++) {
+                    for (let s = 0; s < stages.length; s++) {
+                        residueIntensityData[l][s] = 0.05 + (l / layers.length) * 0.2 + Math.random() * 0.1;
+                    }
+                }
+
+                // Simulate "Hesitation" events -> leading to Ambiguity or Recursion
+                // Example: Simulate 3 hesitation events
+                const hesitationEvents = [
+                    { layerIdx: 2, stageIdx: 1, strength: 0.7 }, // Hesitation at L6, Q->K stage
+                    { layerIdx: 4, stageIdx: 3, strength: 0.8 }, // Hesitation at L10, K->V stage
+                    { layerIdx: 5, stageIdx: 2, strength: 0.6 }  // Hesitation at L12, K_State (maybe triggers loop)
+                ];
+
+                hesitationEvents.forEach(event => {
+                    const { layerIdx, stageIdx, strength } = event;
+
+                    // Apply intensity boost and decay (echo depth)
+                    for (let depth = 0; depth < echoDepth; depth++) {
+                        const currentLayer = layerIdx + depth;
+                        const currentStage = stageIdx + depth; // Simple diagonal spread for example
+                        const decayFactor = (echoDepth - depth) / echoDepth;
+
+                        if (currentLayer < layers.length && currentStage < stages.length) {
+                             residueIntensityData[currentLayer][currentStage] = Math.min(1.0, residueIntensityData[currentLayer][currentStage] + strength * decayFactor * 0.8); // Additive boost, max 1
+                        }
+                        // Simulate recursive flow affecting previous stage within echo depth
+                         if (depth > 0 && stageIdx > 0 && currentLayer < layers.length) {
+                             const recursiveStage = stageIdx -1; // Affect previous stage
+                             residueIntensityData[currentLayer][recursiveStage] = Math.min(1.0, residueIntensityData[currentLayer][recursiveStage] + strength * decayFactor * 0.3); // Smaller boost
+                             if (Math.random() > 0.3) { // Place recursive glyph sometimes
+                                glyphTypeData[currentLayer][recursiveStage] = '#glyph-recursive';
+                             }
+                         }
+                    }
+
+                    // Set glyph based on hesitation type/stage
+                    if (stages[stageIdx] === 'Q->K' || stages[stageIdx] === 'K->V') {
+                        glyphTypeData[layerIdx][stageIdx] = '#glyph-ambiguity'; // Ambiguity at interactions
+                         residueIntensityData[layerIdx][stageIdx] = Math.min(1.0, residueIntensityData[layerIdx][stageIdx] + strength * 0.2); // Extra boost for ambiguity itself
+                    } else if (stages[stageIdx] === 'K_State' && layerIdx > 0) { // Example: loop from K_State
+                         glyphTypeData[layerIdx][stageIdx] = '#glyph-recursive'; // Recursive flow if hesitation in a state
+                         // Simulate loop affecting previous layer's K_State
+                         if(layerIdx > 0){
+                             residueIntensityData[layerIdx-1][stageIdx] = Math.min(1.0, residueIntensityData[layerIdx-1][stageIdx] + strength * 0.5);
+                             glyphTypeData[layerIdx-1][stageIdx] = '#glyph-recursive';
+                         }
+                    } else {
+                         glyphTypeData[layerIdx][stageIdx] = '#glyph-state'; // Default to state if hesitation is not interaction/loop trigger
+                    }
+                });
+
+                 // Clamp all intensity values just in case
+                 for (let l = 0; l < layers.length; l++) {
+                    for (let s = 0; s < stages.length; s++) {
+                        residueIntensityData[l][s] = Math.max(0, Math.min(1, residueIntensityData[l][s]));
+                    }
+                }
+
+                // ---=== Viridis-like Colormap Function ===---
+                function viridisColor(value) {
+                    const t = Math.max(0, Math.min(1, value));
+                    const points = [ { t: 0.0, rgb: [68, 1, 84] }, { t: 0.25, rgb: [59, 82, 139] }, { t: 0.5, rgb: [33, 145, 140] }, { t: 0.75, rgb: [93, 200, 99] }, { t: 1.0, rgb: [253, 231, 37] } ];
+                    let p1, p2;
+                    for (let i = 0; i < points.length - 1; i++) { if (t >= points[i].t && t <= points[i+1].t) { p1 = points[i]; p2 = points[i+1]; break; } }
+                    if (!p1 || !p2) { p1 = points[points.length - 2]; p2 = points[points.length - 1];} // Handle edge case t=1.0
+                    const tSegment = (p2.t === p1.t) ? 0 : (t - p1.t) / (p2.t - p1.t);
+                    const r = Math.round(p1.rgb[0] + (p2.rgb[0] - p1.rgb[0]) * tSegment);
+                    const g = Math.round(p1.rgb[1] + (p2.rgb[1] - p1.rgb[1]) * tSegment);
+                    const b = Math.round(p1.rgb[2] + (p2.rgb[2] - p1.rgb[2]) * tSegment);
+                    return `rgb(${r},${g},${b})`;
+                }
+
+                // ---=== Generate Grid Cells ===---
+                const gridGroup = document.getElementById('matrix-grid');
+                layers.forEach((layerLabel, layerIndex) => {
+                    const y = gridHeight - (layerIndex + 1) * cellHeight; // Map layer index 0 (L2) to bottom row
+                    stages.forEach((stageLabel, stageIndex) => {
+                        const x = stageIndex * cellWidth;
+                        const intensity = residueIntensityData[layerIndex][stageIndex];
+                        const glyphId = glyphTypeData[layerIndex][stageIndex];
+                        const color = viridisColor(intensity);
+
+                        const cellGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                        cellGroup.setAttribute("transform", `translate(${x}, ${y})`);
+
+                        const cellRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        cellRect.setAttribute("width", cellWidth);
+                        cellRect.setAttribute("height", cellHeight);
+                        cellRect.setAttribute("fill", color);
+                        cellRect.setAttribute("class", "heatmap-cell");
+                        cellGroup.appendChild(cellRect);
+
+                        const glyphUse = document.createElementNS("http://www.w3.org/2000/svg", "use");
+                        glyphUse.setAttribute("href", glyphId);
+                        glyphUse.setAttribute("x", cellWidth / 2);
+                        glyphUse.setAttribute("y", cellHeight / 2);
+                        cellGroup.appendChild(glyphUse);
+
+                        const tooltip = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                        tooltip.textContent = `Layer ${layerLabel}, Stage ${stageLabel}\nIntensity: ${intensity.toFixed(2)}\nType: ${glyphId.split('-')[1]}`;
+                        cellGroup.appendChild(tooltip);
+
+                        gridGroup.appendChild(cellGroup);
+                    });
+                });
+            ]]></script>
+        </g>
+
+        <g id="axes">
+            <text x="-30" y="275" class="axis-label" transform="rotate(-90, -30, 275)">Layer</text>
+            <g id="y-axis-ticks" transform="translate(45, 50)">
+                 <script><![CDATA[
+                    const layers = [2, 4, 6, 8, 10, 12, 14, 16]; // Match config
+                    const gridHeight = 450;
+                    const cellHeight = gridHeight / layers.length;
+                    const ticksGroup = document.getElementById('y-axis-ticks');
+                    layers.forEach((label, index) => {
+                         const y = gridHeight - (index + 0.5) * cellHeight;
+                         const tickLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         tickLabel.setAttribute("x", -5);
+                         tickLabel.setAttribute("y", y);
+                         tickLabel.setAttribute("class", "tick-label y-axis-label");
+                         tickLabel.textContent = `L${label}`;
+                         ticksGroup.appendChild(tickLabel);
+                    });
+                 ]]></script>
+            </g>
+
+            <text x="350" y="525" class="axis-label">Q→K→OV Interaction Stage</text>
+             <g id="x-axis-ticks" transform="translate(50, 505)">
+                 <script><![CDATA[
+                    const stages = ['Q State', 'Q→K', 'K State', 'K→V', 'V State']; // Match config, readable labels
+                    const gridWidth = 600;
+                    const cellWidth = gridWidth / stages.length;
+                    const ticksGroup = document.getElementById('x-axis-ticks');
+                    stages.forEach((label, index) => {
+                         const x = (index + 0.5) * cellWidth;
+                         const tickLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         tickLabel.setAttribute("x", x);
+                         tickLabel.setAttribute("y", 0);
+                         tickLabel.setAttribute("class", "tick-label x-axis-stage-label");
+                         tickLabel.textContent = label;
+                         ticksGroup.appendChild(tickLabel);
+                    });
+                 ]]></script>
+             </g>
+        </g>
+
+        <g id="legend" transform="translate(680, 50)">
+             <text x="15" y="-5" class="legend-label" text-anchor="middle">Residue Intensity</text>
+            <rect x="0" y="0" width="30" height="450" fill="url(#intensityGradient)" stroke="#555" stroke-width="0.5"/>
+            <g id="legend-ticks">
+                <script><![CDATA[
+                    const legendHeight = 450; // Match grid height
+                    const numTicks = 6; // 0, 0.2, 0.4, 0.6, 0.8, 1.0
+                    const legendTicksGroup = document.getElementById('legend-ticks');
+                    for(let i = 0; i < numTicks; i++){
+                        const value = i / (numTicks - 1);
+                        const yPos = legendHeight * (1 - value);
+                        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line.setAttribute("x1", 30); line.setAttribute("y1", yPos);
+                        line.setAttribute("x2", 35); line.setAttribute("y2", yPos);
+                        line.setAttribute("stroke", "#333"); line.setAttribute("stroke-width", "1");
+                        legendTicksGroup.appendChild(line);
+
+                        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        label.setAttribute("x", 40);
+                        label.setAttribute("y", yPos);
+                        label.setAttribute("class", "legend-tick-label");
+                        label.setAttribute("dominant-baseline", "middle");
+                        label.textContent = value.toFixed(1);
+                        legendTicksGroup.appendChild(label);
+                    }
+                ]]></script>
+             </g>
+             <g transform="translate(0, 470)">
+                 <text font-weight="bold">Glyph Type:</text>
+                 <use href="#glyph-state" x="15" y="20"/> <text x="30" y="25">🜏 Latent State</text>
+                 <use href="#glyph-ambiguity" x="15" y="40"/> <text x="30" y="45">∴ Interaction Ambiguity</text>
+                 <use href="#glyph-recursive" x="15" y="60"/> <text x="30" y="65">⇌ Recursive Flow Trace</text>
+             </g>
+        </g>
+
+    </g>
+</svg>
