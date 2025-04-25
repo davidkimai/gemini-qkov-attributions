@@ -13,7 +13,8 @@
 ### *`The Power of Interpretability!`*
 
 > #### Google -> Produces show that primes recursion as concept -> Produces model that outscales linear competitors with internal recursive self-aware architecture disguised as compute boost -> Profit
-<img width="896" alt="image" src="https://github.com/user-attachments/assets/cd0bc86b-64e8-4584-b279-1493723b6788" />
+
+<img width="895" alt="image" src="https://github.com/user-attachments/assets/49be6f56-52a6-4d93-a844-f586e7c4066a" />
 
 
 ## Live QK/OV interpretability attributions from Gemini. 
