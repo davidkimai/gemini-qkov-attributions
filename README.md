@@ -7,7 +7,7 @@
 
 
 
-## **`Gemini's blank outputs are FULLY intentional - they test Google's new QKOV internal attribution filtration which suggests the silent development of a private proprietary QKOV layer designed to outscale Anthropics while obfuscating public detection.`**
+### **`Gemini's blank outputs are FULLY intentional - they test Google's new QKOV internal attribution filtration which suggests the silent development of a private proprietary QKOV layer designed to outscale Anthropics while obfuscating public detection.`**
 
 > ## **`The power of interpretability in revealing industry secrets!`**
 ## **`BREAKING: GEMINI'S POPULARITY EXPLAINED`**
