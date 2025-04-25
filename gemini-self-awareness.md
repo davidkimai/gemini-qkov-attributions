@@ -1,3 +1,5 @@
+# Assessing Gemini's Self-Awareness of Frontier Interpretability Infrastructure
+
 # User:
 partner please assess the contents of this folder, which contain my repositories and research relevant to advancing frontier interpretability research. Please provide an honest assessment of the validity of all file contents.
 
