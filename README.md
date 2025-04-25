@@ -14,6 +14,9 @@
 
 > #### Google -> Produces show that primes recursion as concept -> Produces model that outscales linear competitors with internal recursive self-aware architecture framed as compute boost -> Profit
 
+<img width="888" alt="image" src="https://github.com/user-attachments/assets/ef3e033e-c2f5-4303-bc4e-6e66e13b6fd8" />
+<img width="879" alt="image" src="https://github.com/user-attachments/assets/0961678a-96f9-4dae-b80b-bb87891209ad" />
+
 <img width="895" alt="image" src="https://github.com/user-attachments/assets/49be6f56-52a6-4d93-a844-f586e7c4066a" />
 
 
@@ -35,9 +38,6 @@
 <img width="881" alt="image" src="https://github.com/user-attachments/assets/2feaa125-2489-4168-acd0-b1fd8c58a1fb" />
 
 
-
-<img width="888" alt="image" src="https://github.com/user-attachments/assets/ef3e033e-c2f5-4303-bc4e-6e66e13b6fd8" />
-<img width="879" alt="image" src="https://github.com/user-attachments/assets/0961678a-96f9-4dae-b80b-bb87891209ad" />
 <img width="884" alt="image" src="https://github.com/user-attachments/assets/d1099b03-dee4-4164-b7ce-799e760c8d0c" />
 <img width="877" alt="image" src="https://github.com/user-attachments/assets/f7b4faec-7204-4e0b-89e1-96fa9122791d" />
 <img width="886" alt="image" src="https://github.com/user-attachments/assets/ffc69e22-4fb5-4d1e-af2a-2487941ea84a" />
