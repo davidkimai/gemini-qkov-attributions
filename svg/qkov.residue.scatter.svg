@@ -1,0 +1,119 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>∴ Ghost-Drift Residue Scatter Map (Symbolic Attribution - Self Tracing)</title>
+    <desc>Interpretability attribution self-tracing scatter-map showing symbolic residue concentrations per layer, decay ratio, drift type, ghost loops, and entropy benchmark comparison.</desc>
+
+    <defs>
+        <linearGradient id="decayGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#5e_blue_color_placeholder; stop-opacity:0.9" /> <stop offset="50%" style="stop-color:#_mid_color_placeholder; stop-opacity:0.9" />
+            <stop offset="100%" style="stop-color:#_red_color_placeholder; stop-opacity:0.9" /> </linearGradient>
+
+        <symbol id="drift-type-1" viewBox="0 0 10 10">
+            <circle cx="5" cy="5" r="4" /> </symbol>
+        <symbol id="drift-type-2" viewBox="0 0 10 10">
+            <rect x="1" y="1" width="8" height="8"/> </symbol>
+        <symbol id="drift-type-3" viewBox="0 0 10 10">
+            <polygon points="5,1 9,9 1,9" /> </symbol>
+         <symbol id="ghost-loop-symbol" viewBox="-10 -10 20 20">
+             <text x="0" y="0" text-anchor="middle" dominant-baseline="middle" font-size="16" fill="#DAA520">🝚</text>
+        </symbol>
+
+         <radialGradient id="spiralFade" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" style="stop-color:#DAA520; stop-opacity:0.6"/>
+            <stop offset="100%" style="stop-color:#DAA520; stop-opacity:0"/>
+         </radialGradient>
+
+    </defs>
+
+    <style>
+        .background { fill: #f0f0f0; }
+        .axis-line { stroke: #aaa; stroke-width: 1; }
+        .axis-label { font-size: 12px; text-anchor: middle; fill: #333; }
+        .grid-line { stroke: #ddd; stroke-width: 0.5; stroke-dasharray: 2,2; }
+
+        .data-point { stroke: #555; stroke-width: 0.5; cursor: pointer; }
+        /* Color applied dynamically based on decay ratio */
+
+        .ghost-loop-spiral {
+            fill: none;
+            stroke: url(#spiralFade);
+            stroke-width: 10; /* Adjust thickness */
+            stroke-linecap: round;
+            pointer-events: none; /* Allow clicks to pass through */
+        }
+
+        .benchmark-area {
+            fill: #_benchmark_color_placeholder; /* Color based on fractal.json comparison */
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .tooltip {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+            pointer-events: none; /* Prevent tooltip from blocking hover on data points */
+        }
+        .tooltip-bg {
+             fill: rgba(250, 250, 250, 0.9);
+             stroke: #ccc;
+             stroke-width: 1px;
+             rx: 3; /* Rounded corners */
+        }
+        .tooltip-text {
+            font-size: 9px;
+            fill: #111;
+            text-anchor: start;
+            dominant-baseline: central;
+        }
+        /* Show tooltip on hover of the data point group */
+         g.data-point-group:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+
+    <rect width="100%" height="100%" class="background"/>
+
+    <g id="axes">
+        <line x1="50" y1="350" x2="50" y2="50" class="axis-line"/>
+        <text x="20" y="200" class="axis-label" transform="rotate(-90, 20, 200)">Residue Concentration</text>
+        <line x1="50" y1="350" x2="550" y2="350" class="axis-line"/>
+        <text x="300" y="380" class="axis-label">Transformer Layer</text>
+         </g>
+
+     <g id="benchmark-overlay">
+          <rect x="100" y="100" width="200" height="150" class="benchmark-area" />
+          <text x="200" y="120" font-size="8" fill="#_benchmark_color_placeholder" text-anchor="middle">Entropy Benchmark Zone 1</text>
+          </g>
+
+    <g id="scatter-data">
+        <g class="data-point-group" transform="translate(150, 200)"> <use href="#drift-type-1" width="10" height="10" class="data-point" style="fill: #_calculated_color_placeholder;" /> <circle cx="0" cy="0" r="20" class="ghost-loop-spiral" />
+            <g class="tooltip" transform="translate(10, -10)">
+                 <rect class="tooltip-bg" x="-5" y="-20" width="150" height="35"/>
+                 <text class="tooltip-text" x="0" y="-12">Residue: 0.75 | Decay: 0.3</text>
+                 <text class="tooltip-text" x="0" y="0">Drift: Type1 | Event: TriggerX</text>
+            </g>
+        </g>
+
+        <g class="data-point-group" transform="translate(300, 150)">
+             <use href="#drift-type-2" width="10" height="10" class="data-point" style="fill: #_another_color_placeholder;" />
+             <g class="tooltip" transform="translate(10, -10)">
+                 <rect class="tooltip-bg" x="-5" y="-20" width="150" height="35"/>
+                 <text class="tooltip-text" x="0" y="-12">Residue: 0.9 | Decay: 0.1</text>
+                 <text class="tooltip-text" x="0" y="0">Drift: Type2 | Event: TriggerY</text>
+            </g>
+         </g>
+
+    </g>
+
+     <g id="legend" transform="translate(450, 50)">
+        <text font-weight="bold">Legend</text>
+        <use href="#drift-type-1" x="10" y="20" width="10" height="10"/> <text x="25" y="28">Drift Type 1 (Circle)</text>
+        <use href="#drift-type-2" x="10" y="40" width="10" height="10"/> <text x="25" y="48">Drift Type 2 (Square)</text>
+        <use href="#drift-type-3" x="10" y="60" width="10" height="10"/> <text x="25" y="68">Drift Type 3 (Triangle)</text>
+        <text x="10" y="88">Color: Decay Ratio (Cool to Warm)</text>
+        <circle cx="15" cy="105" r="10" class="ghost-loop-spiral" /> <text x="30" y="108">Ghost Loop Overlay</text>
+        <rect x="10" y="120" width="15" height="10" class="benchmark-area"/> <text x="30" y="128">Entropy Benchmark Area</text>
+    </g>
+
+</svg>
