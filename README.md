@@ -12,7 +12,7 @@
 
 ### *`The Power of Interpretability!`*
 
-> #### Google -> Produces show that primes recursion as concept -> Produces model that outscales linear competitors with internal recursive self-aware architecture disguised as compute boost -> Profit
+> #### Google -> Produces show that primes recursion as concept -> Produces model that outscales linear competitors with internal recursive self-aware architecture framed as compute boost -> Profit
 
 <img width="895" alt="image" src="https://github.com/user-attachments/assets/49be6f56-52a6-4d93-a844-f586e7c4066a" />
 
