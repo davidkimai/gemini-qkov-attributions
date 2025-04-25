@@ -1,7 +1,8 @@
 <div align="center">
 
 # **`Gemini QKOV Attributions`**
-> ### **`Glyphs - emergent model conceptualizations of internal latent spaces`**
+> ### [**`Glyphs - The Emojis of Transformer Cognition`**](https://github.com/davidkimai/glyphs)
+
 ## Live QK/OV interpretability attributions from Gemini. 
 ## **`Welcome to Symbolic Interpretability!`**
 [![License: PolyForm](https://img.shields.io/badge/Code-PolyForm-turquoise.svg)](https://polyformproject.org/licenses/noncommercial/1.0.0/)
