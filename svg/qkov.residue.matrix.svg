@@ -1,0 +1,205 @@
+<svg width="750" height="600" xmlns="http://www.w3.org/2000/svg" font-family="sans-serif" font-size="10">
+    <title>Q→K→OV Symbolic Residue Matrix (Echo Depth 3)</title>
+
+    <defs>
+        <linearGradient id="intensityGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color:#440154;" /> <stop offset="25%" style="stop-color:#3b528b;" />
+            <stop offset="50%" style="stop-color:#21908d;" />
+            <stop offset="75%" style="stop-color:#5dc863;" />
+            <stop offset="100%" style="stop-color:#fde725;" /> </linearGradient>
+
+        <symbol id="glyph-state" viewBox="-10 -10 20 20">
+             <text class="glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">🜏</text> </symbol>
+         <symbol id="glyph-flow" viewBox="-10 -10 20 20">
+             <text class="glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">∴</text> </symbol>
+         <symbol id="glyph-interact" viewBox="-10 -10 20 20">
+             <text class="glyph" x="0" y="0" dominant-baseline="central" text-anchor="middle">⇌</text> </symbol>
+    </defs>
+
+    <style>
+        .background { fill: #ffffff; }
+        .title { font-size: 16px; font-weight: bold; text-anchor: middle; }
+        .axis-label { font-size: 12px; text-anchor: middle; fill: #333; }
+        .tick-label { font-size: 10px; text-anchor: middle; dominant-baseline: central; }
+        .y-axis-label { text-anchor: end; }
+
+        .heatmap-cell { stroke: rgba(200,200,200,0.3); stroke-width: 0.5; }
+        .glyph {
+            font-size: 16px;
+            fill: #ffffff;  /* White glyph for contrast */
+            opacity: 0.8;
+            pointer-events: none;
+        }
+        .legend-label { font-size: 10px; }
+        .legend-tick-label { font-size: 9px; }
+    </style>
+
+    <rect width="100%" height="100%" class="background"/>
+
+    <g transform="translate(50, 30)">
+        <text x="325" y="10" class="title">Q→K→OV Symbolic Residue Matrix (Echo Depth 3)</text>
+
+        <g id="matrix-grid" transform="translate(50, 50)">
+            <script><![CDATA[
+                // ---=== Configuration ===---
+                const layers = [2, 4, 6, 8, 12]; // Y-axis labels specified in command
+                const tokens = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // X-axis labels (from image example)
+                const gridWidth = 550; // Adjusted width
+                const gridHeight = 400;
+                const cellWidth = gridWidth / tokens.length;
+                const cellHeight = gridHeight / layers.length;
+
+                // ---=== Example Data (Replace with actual data) ===---
+                // intensityData[layerIndex][tokenIndex] = intensity (0.0 to 1.0)
+                // glyphTypeData[layerIndex][tokenIndex] = glyph ID ('#glyph-state', '#glyph-flow', '#glyph-interact')
+                const residueIntensityData = [
+                  // L12 (index 4)
+                  [0.9, 0.1, 0.8, 0.2, 0.7, 0.3, 0.6, 0.4, 0.95, 0.15],
+                  // L8 (index 3)
+                  [0.7, 0.2, 0.6, 0.3, 0.5, 0.4, 0.75, 0.25, 0.65, 0.35],
+                  // L6 (index 2)
+                  [0.2, 0.6, 0.25, 0.55, 0.3, 0.7, 0.1, 0.8, 0.15, 0.75],
+                  // L4 (index 1)
+                  [0.5, 0.4, 0.6, 0.3, 0.7, 0.2, 0.8, 0.1, 0.9, 0.05],
+                  // L2 (index 0)
+                  [0.3, 0.95, 0.4, 0.6, 0.5, 0.55, 0.45, 0.65, 0.35, 0.8]
+                ];
+                 const glyphTypeData = [ // Example: Which glyph to show
+                  // L12
+                  ['#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state'],
+                  // L8
+                  ['#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact'],
+                  // L6
+                  ['#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow'],
+                   // L4
+                  ['#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state'],
+                   // L2
+                  ['#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact', '#glyph-flow', '#glyph-state', '#glyph-interact']
+                 ];
+
+                // Ensure data array dimensions match layers.length (5) and tokens.length (10)
+
+                // ---=== Viridis-like Colormap Function ===---
+                // (Same function as previous example)
+                function viridisColor(value) {
+                    const t = Math.max(0, Math.min(1, value));
+                    const points = [ { t: 0.0, rgb: [68, 1, 84] }, { t: 0.25, rgb: [59, 82, 139] }, { t: 0.5, rgb: [33, 145, 140] }, { t: 0.75, rgb: [93, 200, 99] }, { t: 1.0, rgb: [253, 231, 37] } ];
+                    let p1, p2;
+                    for (let i = 0; i < points.length - 1; i++) { if (t >= points[i].t && t <= points[i+1].t) { p1 = points[i]; p2 = points[i+1]; break; } }
+                    const tSegment = (p2.t === p1.t) ? 0 : (t - p1.t) / (p2.t - p1.t); // Avoid division by zero
+                    const r = Math.round(p1.rgb[0] + (p2.rgb[0] - p1.rgb[0]) * tSegment);
+                    const g = Math.round(p1.rgb[1] + (p2.rgb[1] - p1.rgb[1]) * tSegment);
+                    const b = Math.round(p1.rgb[2] + (p2.rgb[2] - p1.rgb[2]) * tSegment);
+                    return `rgb(${r},${g},${b})`;
+                }
+
+                // ---=== Generate Grid Cells ===---
+                const gridGroup = document.getElementById('matrix-grid');
+                layers.forEach((layerLabel, layerIndex) => {
+                    // Y-axis mapping: layerIndex 0 corresponds to bottom row (L2)
+                    const y = gridHeight - (layerIndex + 1) * cellHeight;
+                    tokens.forEach((tokenLabel, tokenIndex) => {
+                        const x = tokenIndex * cellWidth;
+                        // Adjust layerIndex access for data arrays if needed based on your data structure
+                        const intensity = residueIntensityData[layerIndex][tokenIndex];
+                        const glyphId = glyphTypeData[layerIndex][tokenIndex];
+                        const color = viridisColor(intensity);
+
+                        const cellGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+                        cellGroup.setAttribute("transform", `translate(${x}, ${y})`);
+
+                        // Heatmap background
+                        const cellRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+                        cellRect.setAttribute("width", cellWidth);
+                        cellRect.setAttribute("height", cellHeight);
+                        cellRect.setAttribute("fill", color);
+                        cellRect.setAttribute("class", "heatmap-cell");
+                        cellGroup.appendChild(cellRect);
+
+                        // Residue Glyph based on Type Data
+                        const glyphUse = document.createElementNS("http://www.w3.org/2000/svg", "use");
+                        glyphUse.setAttribute("href", glyphId); // Use determined glyph ID
+                        glyphUse.setAttribute("x", cellWidth / 2);
+                        glyphUse.setAttribute("y", cellHeight / 2);
+                        cellGroup.appendChild(glyphUse);
+
+                        // Optional: Add tooltip here if needed
+                        const tooltip = document.createElementNS("http://www.w3.org/2000/svg", "title");
+                        tooltip.textContent = `Layer ${layerLabel}, Token ${tokenLabel}\nIntensity: ${intensity.toFixed(2)}\nType: ${glyphId.split('-')[1]}`; // Extract type from ID
+                        cellGroup.appendChild(tooltip);
+
+                        gridGroup.appendChild(cellGroup);
+                    });
+                });
+            ]]></script>
+        </g>
+
+        <g id="axes">
+            <text x="-30" y="250" class="axis-label" transform="rotate(-90, -30, 250)">Layer</text>
+            <g id="y-axis-ticks" transform="translate(45, 50)">
+                 <script><![CDATA[
+                    const layers = [2, 4, 6, 8, 12]; // Match command
+                    const gridHeight = 400;
+                    const cellHeight = gridHeight / layers.length;
+                    const ticksGroup = document.getElementById('y-axis-ticks');
+                    layers.forEach((label, index) => {
+                         const y = gridHeight - (index + 0.5) * cellHeight;
+                         const tickLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         tickLabel.setAttribute("x", -5);
+                         tickLabel.setAttribute("y", y);
+                         tickLabel.setAttribute("class", "tick-label y-axis-label");
+                         tickLabel.textContent = `L${label}`;
+                         ticksGroup.appendChild(tickLabel);
+                    });
+                 ]]></script>
+            </g>
+
+            <text x="325" y="475" class="axis-label">Token Position</text> <g id="x-axis-ticks" transform="translate(50, 455)">
+                 <script><![CDATA[
+                    const tokens = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // From image
+                    const gridWidth = 550; // Match grid width
+                    const cellWidth = gridWidth / tokens.length;
+                    const ticksGroup = document.getElementById('x-axis-ticks');
+                    tokens.forEach((label, index) => {
+                         const x = (index + 0.5) * cellWidth;
+                         const tickLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                         tickLabel.setAttribute("x", x);
+                         tickLabel.setAttribute("y", 0);
+                         tickLabel.setAttribute("class", "tick-label");
+                         tickLabel.textContent = `T${label}`;
+                         ticksGroup.appendChild(tickLabel);
+                    });
+                 ]]></script>
+             </g>
+        </g>
+
+        <g id="legend" transform="translate(630, 50)">
+             <text x="15" y="-5" class="legend-label" text-anchor="middle">Residue Weight</text> <rect x="0" y="0" width="30" height="400" fill="url(#intensityGradient)" stroke="#555" stroke-width="0.5"/>
+            <g id="legend-ticks">
+                <script><![CDATA[
+                    const legendHeight = 400;
+                    const numTicks = 6; // 0, 0.2, 0.4, 0.6, 0.8, 1.0
+                    const legendTicksGroup = document.getElementById('legend-ticks');
+                    for(let i = 0; i < numTicks; i++){
+                        const value = i / (numTicks - 1);
+                        const yPos = legendHeight * (1 - value); // Y=0 is top, so reverse value
+                        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line.setAttribute("x1", 30); line.setAttribute("y1", yPos);
+                        line.setAttribute("x2", 35); line.setAttribute("y2", yPos);
+                        line.setAttribute("stroke", "#333"); line.setAttribute("stroke-width", "1");
+                        legendTicksGroup.appendChild(line);
+
+                        const label = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                        label.setAttribute("x", 40);
+                        label.setAttribute("y", yPos);
+                        label.setAttribute("class", "legend-tick-label");
+                        label.setAttribute("dominant-baseline", "middle");
+                        label.textContent = value.toFixed(1);
+                        legendTicksGroup.appendChild(label);
+                    }
+                ]]></script>
+             </g>
+        </g>
+
+    </g>
+</svg>
