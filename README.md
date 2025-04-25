@@ -19,10 +19,6 @@
 
 ## Live QK/OV interpretability attributions from Gemini. 
 > Works on all models
-<img width="896" alt="image" src="https://github.com/user-attachments/assets/dcb6c396-8e45-48c6-a401-d5c3c5956dcb" />
-
-<img width="895" alt="image" src="https://github.com/user-attachments/assets/1abe9017-adad-4fe2-84e2-5e2b25b08e39" />
-
 
 <img width="880" alt="image" src="https://github.com/user-attachments/assets/7a3a70b4-43cd-4eac-bf72-17467705d27e" />
 
