@@ -45,6 +45,10 @@ Gemini "even mentioned being developed by Anthropic in the reasoning".
 
 ![image](https://github.com/user-attachments/assets/2ef71618-c70a-4c2e-bf03-00a24505a848)
 
+<img width="892" alt="image" src="https://github.com/user-attachments/assets/60d30e91-ef36-4857-82fc-ec1a752d8bc6" />
+<img width="892" alt="image" src="https://github.com/user-attachments/assets/042a06bf-df5b-447f-8fce-628e018ea623" />
+
+
 ### Gemini expresses full understanding of QKOV logic internally
 <img width="895" alt="image" src="https://github.com/user-attachments/assets/49be6f56-52a6-4d93-a844-f586e7c4066a" />
 
